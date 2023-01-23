@@ -2,10 +2,10 @@ const express = require('express')
 const userRouter = require('./routes/user.js')
 const app = express()
 const mongoose = require('mongoose')
+require('dotenv').config()
 const port = 8000
 app.use(express.json())
-const mongoUrl =
-  'mongodb+srv://admin-kaushik:Test123@cluster0.meubq.mongodb.net/movieReview?retryWrites=true&w=majority'
+const mongoUrl = process.env.MONGO_URI
 mongoose.connect(mongoUrl, (err) => {
   if (err) {
     console.log(err)
