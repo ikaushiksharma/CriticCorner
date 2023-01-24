@@ -1,9 +1,11 @@
-const express = require("express");
-const { create } = require("../controllers/user");
-const { userValidtor, validate } = require("../middlewares/validator.js");
+const express = require('express')
+const { create, verifyEmail, resendEmailVerificationToken } = require('../controllers/user')
+const { userValidtor, validate } = require('../middlewares/validator.js')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post("/create", userValidtor, validate, create);
+router.post('/create', userValidtor, validate, create)
+router.post('/verify-email', verifyEmail)
+router.post('/resend-email-verification-token', resendEmailVerificationToken)
 
-module.exports = router;
+module.exports = router
