@@ -1,10 +1,15 @@
 const express = require('express')
-const userRouter = require('./routes/user.js')
-const app = express()
+require("express-async-errors");
 const mongoose = require('mongoose')
+const morgan = require('morgan')
+const userRouter = require('./routes/user.js')
+const errorHandler = require("./middlewares/error.js")
+
+const app = express()
 require('dotenv').config()
 const port = 8000
 app.use(express.json())
+
 const mongoUrl = process.env.MONGO_URI
 mongoose.connect(mongoUrl, (err) => {
   if (err) {
@@ -13,22 +18,12 @@ mongoose.connect(mongoUrl, (err) => {
   }
   console.log('connected to mongoose')
 })
+app.get("/", (req, res) => {
+  res.send(`${errorHandler}`)
+})
+app.use(morgan("dev"));
+app.use("/api/user", userRouter);
 
-app.use('/api/user', userRouter)
-
-// middleware example
-app.post(
-  '/sign-in',
-  (req, res, next) => {
-    const { email, password } = req.body
-    if (!email || !password) return res.json({ error: 'email/password missing!' })
-    next()
-  },
-  (req, res) => {
-    res.send('<h1>Hello I am about page</h1>')
-  },
-)
-
+app.use(errorHandler);
+// console.log(errorHandler)
 app.listen(port, () => console.log(`Movie Reviewer is listening on port ${port}!`))
-
-
