@@ -8,8 +8,15 @@ import Signup from "./components/auth/Signup";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 import Navbar from "./components/user/Navbar";
+import AdminNavigator from "./navigator/AdminNavigator.jsx";
+import { useAuth } from "./hooks";
 
 export default function App() {
+  const { authInfo } = useAuth();
+  // console.log(authInfo);
+  const isAdmin = authInfo.profile?.role === "admin";
+  // console.log(isAdmin);
+  if (isAdmin) return <AdminNavigator />;
   return (
     <>
       <Navbar />

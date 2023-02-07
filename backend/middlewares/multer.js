@@ -15,4 +15,4 @@ const videoFileFilter = (req, file, cb) => {
 };
 
 exports.uploadImage = multer({ storage, imageFileFilter });
-exports.uploadVideo = multer({ storage, fileFilter });
+exports.uploadVideo = multer({ storage, videoFileFilter });
