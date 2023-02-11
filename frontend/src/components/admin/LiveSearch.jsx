@@ -1,18 +1,16 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 
-
-
 export default function LiveSearch({
-  value='',
-  onChange=null,
-  placeholder='',
+  value = "",
+  onChange = null,
+  placeholder = "",
   results = [],
   name,
   selectedResultStyle,
   resultContainerStyle,
-  renderItem=null,
-  onSelect=null,
+  renderItem = null,
+  onSelect = null,
   inputStyle,
 }) {
   const [displaySearch, setDisplaySearch] = useState(false);
@@ -30,7 +28,10 @@ export default function LiveSearch({
     }, 100);
   };
   const handleSelection = (selectedItem) => {
-    onSelect(selectedItem);
+    if (selectedItem) {
+      onSelect(selectedItem);
+      closeSearch();
+    }
   };
   const handleKeyDown = ({ key }) => {
     let nextCount;
@@ -44,6 +45,8 @@ export default function LiveSearch({
       nextCount = (focusedIndex + results.length - 1) % results.length;
     }
     if (key === keys[2]) return handleSelection(results[focusedIndex]);
+    if (key === keys[3]) return closeSearch();
+
     setFocusedIndex(nextCount);
   };
   const getInputStyle = () => {
