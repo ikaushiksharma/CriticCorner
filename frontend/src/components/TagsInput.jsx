@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-";
-export default function TagsInput({name,onChange}) {
+export default function TagsInput({ name, value, onChange }) {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
   const input = useRef();
@@ -38,6 +38,9 @@ export default function TagsInput({name,onChange}) {
     tagsInput.current.classList.remove("dark:border-dark-subtle", "border-light-subtle");
     tagsInput.current.classList.add("dark:border-white", "border-primary");
   };
+  useEffect(() => {
+    if (value.length) setTags(value);
+  }, [value]);
   useEffect(() => {
     input.current.scrollIntoView();
   }, [tag]);
