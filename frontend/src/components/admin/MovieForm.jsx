@@ -234,6 +234,7 @@ export default function MovieForm() {
         <div className="w-[30%] space-y-5">
           <PosterSelector
             onChange={handleChange}
+            lable="Select Poster"
             name="poster"
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"

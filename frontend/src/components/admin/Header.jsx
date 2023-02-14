@@ -61,6 +61,10 @@ const CreateOptions = ({ options, visible, onClose }) => {
     if (e.target.classList.contains("animate-scale-reverse")) onClose();
     e.target.classList.remove("animate-scale");
   };
+  const handleClick = (fn) => {
+    fn();
+    
+  };
   if (!visible) return null;
   return (
     <div
@@ -70,7 +74,7 @@ const CreateOptions = ({ options, visible, onClose }) => {
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
-        return <Option onClick={onClick}>{title}</Option>;
+        return <Option onClick={() => handleClick(onClick)}>{title}</Option>;
       })}
     </div>
   );
