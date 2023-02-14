@@ -63,7 +63,6 @@ const CreateOptions = ({ options, visible, onClose }) => {
   };
   const handleClick = (fn) => {
     fn();
-    
   };
   if (!visible) return null;
   return (
@@ -74,7 +73,11 @@ const CreateOptions = ({ options, visible, onClose }) => {
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
-        return <Option onClick={() => handleClick(onClick)}>{title}</Option>;
+        return (
+          <Option key={title} onClick={() => handleClick(onClick)}>
+            {title}
+          </Option>
+        );
       })}
     </div>
   );
