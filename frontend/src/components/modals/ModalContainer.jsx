@@ -2,8 +2,8 @@ import React from "react";
 
 export default function ModalContainer({ visible, ignoreContainer, children, onClose }) {
   const handleClick = (e) => {
-    if (e.target.id === "modal-container") onClose();
-    onClose();
+    if (e.target.id === "modal-container") onClose &&  onClose();
+    // onClose();
   };
 
   const renderChildren = () => {

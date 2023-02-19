@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useNotification } from "../../hooks";
+import { searchActor } from "../../api/actor";
+import { useNotification, useSearch } from "../../hooks";
+import { renderItem } from "../../utils/helper";
 import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../admin/LiveSearch";
-import { renderItem, results } from "../admin/MovieForm";
 
 const defaultCastInfo = {
   profile: {},
@@ -10,8 +11,10 @@ const defaultCastInfo = {
   leadActor: false,
 };
 export default function CastForm({ onSubmit }) {
-  const { updateNotification } = useNotification();
   const [castInfo, setCastInfo] = useState({ ...defaultCastInfo });
+  const { updateNotification } = useNotification();
+  const { handleSearch, resetSearch } = useSearch();
+  const [profiles, setProfiles] = useState([]);
   const handleOnChange = ({ target }) => {
     const { checked, name, value } = target;
     if (name === "leadActor") return setCastInfo({ ...castInfo, leadActor: checked });
@@ -25,7 +28,17 @@ export default function CastForm({ onSubmit }) {
     if (!profile.name) return updateNotification("error", "Cast Profile is missing!");
     if (!roleAs.trim()) return updateNotification("error", "Cast Role is missing!");
     onSubmit(castInfo);
-    setCastInfo({ ...defaultCastInfo });
+    setCastInfo({ ...defaultCastInfo, profile: { name: "" } });
+    resetSearch();
+    setProfiles([]);
+  };
+
+  const handleProfileChange = ({ target }) => {
+    const { value } = target;
+    const { profile } = castInfo;
+    profile.name = value;
+    setCastInfo({ ...castInfo, ...profile });
+    handleSearch(searchActor, value, setProfiles);
   };
   const { leadActor, profile, roleAs } = castInfo;
   return (
@@ -36,14 +49,15 @@ export default function CastForm({ onSubmit }) {
         name="leadActor"
         className="w-4 h-4"
         checked={leadActor}
-        title='Set as Lead Actor'
+        title="Set as Lead Actor"
       />
       <LiveSearch
         placeholder="Search profile"
         value={profile.name}
-        results={results}
+        results={profiles}
         onSelect={handleProfileSelect}
         renderItem={renderItem}
+        onChange={handleProfileChange}
       />
       <span className="dark:text-dark-subtle text-light-subtle font-semibold">as</span>
       <div className="flex-grow">

@@ -66,7 +66,7 @@ exports.search = async (req, res) => {
   const { query } = req;
   const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
   const actors = result.map((actor) => formatActor(actor));
-  res.json(actors);
+  res.json({ results: actors });
 };
 exports.getLatestActors = async (req, res) => {
   const result = await Actor.find().sort({ createdAt: "-1" }).limit(12);

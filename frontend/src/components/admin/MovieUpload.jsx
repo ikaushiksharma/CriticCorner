@@ -35,7 +35,7 @@ const MovieUpload = ({ visible, onClose }) => {
     return `Upload Progress ${uploadProgress}`;
   };
   return (
-    <ModalContainer visible={visible} onClose={onClose}>
+    <ModalContainer visible={visible} >
       <UploadProgress
           visible={!videoUploaded && videoSelected}
           message={getUploadProgressValue()}

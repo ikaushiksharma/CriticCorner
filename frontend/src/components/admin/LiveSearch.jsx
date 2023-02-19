@@ -53,6 +53,11 @@ export default function LiveSearch({
     return inputStyle ? inputStyle : commonInputClasses + " border-2 rounded p-1 text-lg";
   };
 
+  useEffect(() => {
+    if (results.length) return setDisplaySearch(true);
+    setDisplaySearch(false);
+  }, [results.length]);
+
   return (
     <div className="relative">
       <input
