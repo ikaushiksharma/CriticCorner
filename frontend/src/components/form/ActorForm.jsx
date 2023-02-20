@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ImSpinner3 } from "react-icons/im";
 import { useNotification } from "../../hooks";
-import commonInputClasses from "../../utils/theme";
+import {commonInputClasses} from "../../utils/theme";
 import Selector from "../Selector";
 import PosterSelector from "./PosterSelector";
 

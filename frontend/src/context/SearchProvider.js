@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import { useNotification } from "../hooks";
 
-const SearchContext = createContext();
+export const SearchContext = createContext();
 
 let timeoutId;
 const debounce = (func, delay) => {
@@ -13,7 +13,7 @@ const debounce = (func, delay) => {
   };
 };
 
-export default function SearchProvider() {
+export default function SearchProvider({children}) {
   const [searching, setSearching] = useState("");
   const [results, setResults] = useState([]);
   const [resultNotFound, setResultNotFound] = useState(false);
@@ -48,7 +48,7 @@ export default function SearchProvider() {
     <SearchContext.Provider
       value={{ handleSearch, resetSearch, searching, resultNotFound, results }}
     >
-      SearchProvider
+      {children}
     </SearchContext.Provider>
   );
 }

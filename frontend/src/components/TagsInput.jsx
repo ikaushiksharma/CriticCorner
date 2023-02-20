@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineClose } from "react-";
+import { AiOutlineClose } from "react-icons/ai";
 export default function TagsInput({ name, value, onChange }) {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
