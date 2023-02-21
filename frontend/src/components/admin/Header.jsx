@@ -69,7 +69,7 @@ const CreateOptions = ({ options, visible, onClose }) => {
     <div
       id={containerID}
       ref={container}
-      className="absolute right-0 top-12 flex flex-col p-5 space-y-3 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
+      className="absolute right-0 top-12 z-50 flex flex-col p-5 space-y-3 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
