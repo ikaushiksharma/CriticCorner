@@ -42,7 +42,7 @@ exports.update = async (req, res) => {
   actor.gender = gender;
 
   await actor.save();
-  res.status(201).json(formatActor(actor));
+  res.status(201).json({ actor: formatActor(actor) });
 };
 
 exports.remove = async (req, res) => {
@@ -63,8 +63,15 @@ exports.remove = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-  const { query } = req;
-  const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
+  const { name } = req.query;
+  // const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
+  if (!name.trim()) return sendError(res, "Invalid Request!");
+  const result = await Actor.find({
+    name: {
+      $regex: name,
+      $options: "i",
+    },
+  });
   const actors = result.map((actor) => formatActor(actor));
   res.json({ results: actors });
 };
