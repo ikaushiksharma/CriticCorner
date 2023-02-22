@@ -13,7 +13,7 @@ export default function ConfirmModal({ visible, busy, title, subtitle, onConfirm
         </p>
         <div className="flex items-center space-x-3 justify-center mt-3">
           {busy ? (
-            <p className="flex items-center space-x-3">
+            <p className="flex items-center space-x-2 text-primary dark:text-white">
               <ImSpinner3 className="animate-spin" />
               <span>Please Wait</span>
             </p>

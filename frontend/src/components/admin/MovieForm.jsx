@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import Submit from "../form/Submit";
 import TagsInput from "../TagsInput";
@@ -33,7 +33,7 @@ const defaultMovieInfo = {
   status: "",
 };
 
-export default function MovieForm({ onSubmit, busy }) {
+export default function MovieForm({ onSubmit, btnTitle, initialState, busy }) {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
@@ -141,7 +141,19 @@ export default function MovieForm({ onSubmit, busy }) {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
-  const { title, storyLine, writers, cast, tags, genres, status, type, language } = movieInfo;
+  useEffect(() => {
+    if (initialState) {
+      setMovieInfo({
+        ...initialState,
+        releaseDate: initialState.releaseDate.split("T")[0],
+        poster: null,
+      });
+      setSelectedPosterForUI(initialState.poster);
+    }
+  }, [initialState]);
+
+  const { title, storyLine, writers, cast, tags, genres, status, type, language, releaseDate } =
+    movieInfo;
   return (
     <>
       <div className="flex space-x-3">
@@ -199,10 +211,11 @@ export default function MovieForm({ onSubmit, busy }) {
             type="date"
             onChange={handleChange}
             name="releaseDate"
+            value={releaseDate}
             className={commonInputClasses + " border-2 rounded p-1 w-auto"}
           />
 
-          <Submit busy={busy} value="Upload" onClick={handleSubmit} type="submit" />
+          <Submit busy={busy} value={btnTitle} onClick={handleSubmit} type="submit" />
         </div>
         <div className="w-[30%] space-y-5">
           <PosterSelector

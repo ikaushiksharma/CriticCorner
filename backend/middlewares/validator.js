@@ -73,6 +73,14 @@ exports.validateMovie = [
         throw Error("Only accepted boolean value inside leadActor inside cast");
       return true;
     }),
+
+  // check("poster").custom((_, { req }) => {
+  //   if (!req.file) throw Error("Poster file is missing!");
+  //   return true;
+  // }),
+];
+
+exports.validateTrailer = [
   check("trailer")
     .isObject()
     .withMessage("trailerInfo must be an object with url and public_id")
@@ -88,12 +96,7 @@ exports.validateMovie = [
         throw Error("Trailer url is invalid");
       }
     }),
-  // check("poster").custom((_, { req }) => {
-  //   if (!req.file) throw Error("Poster file is missing!");
-  //   return true;
-  // }),
 ];
-
 exports.validate = (req, res, next) => {
   const error = validationResult(req).array();
   if (error.length) {

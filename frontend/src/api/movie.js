@@ -32,6 +32,33 @@ export const uploadMovie = async (formData) => {
     return catchError(error);
   }
 };
+export const updateMovie = async (id, formData) => {
+  const token = getToken();
+  try {
+    const { data } = await client.patch("/movie/update/" + id, formData, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "content-type": "mulitpart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
+export const getMovieForUpdate = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client("/movie/for-update/" + id, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
 export const getMovies = async (pageNo, limit) => {
   const token = getToken();
   try {
@@ -39,6 +66,19 @@ export const getMovies = async (pageNo, limit) => {
       headers: {
         Authorization: "Bearer " + token,
         "content-type": "mulitpart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
+export const deleteMovie = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client.delete(`/movie/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
       },
     });
     return data;

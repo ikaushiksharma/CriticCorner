@@ -64,7 +64,7 @@ const MovieUpload = ({ visible, onClose }) => {
           handleChange={handleChange}
         />
       ) : (
-        <MovieForm busy={busy} onSubmit={!busy ? handleSubmit : null} />
+        <MovieForm busy={busy} btnTitle="Upload" onSubmit={!busy ? handleSubmit : null} />
       )}
     </ModalContainer>
   );
