@@ -2,10 +2,10 @@ const express = require("express");
 const {
   uploadTrailer,
   createMovie,
-  // updateMovieWithoutPoster,
   updateMovie,
   removeMovie,
   getMovies,
+  searchMovies,
 } = require("../controllers/movie");
 const { isAuth, isAdmin } = require("../middlewares/auth");
 const { parseData } = require("../middlewares/helper");
@@ -25,15 +25,6 @@ router.post(
   validate,
   createMovie,
 );
-// router.patch(
-//   "/update-movie-without-poster/:movieId",
-//   isAuth,
-//   isAdmin,
-//   parseData,
-//   validateMovie,
-//   validate,
-//   updateMovieWithoutPoster,
-// );
 router.patch(
   "/update/:movieId",
   isAuth,
@@ -47,4 +38,5 @@ router.patch(
 router.delete("/:movieId", isAuth, isAdmin, removeMovie);
 router.get("/movies", isAuth, isAdmin, getMovies);
 router.get("/for-update/:movieId", isAuth, isAdmin, getMovieForUpdate);
+router.get("/search", isAuth, isAdmin, searchMovies);
 module.exports = router;

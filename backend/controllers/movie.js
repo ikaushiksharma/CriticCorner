@@ -168,7 +168,6 @@ exports.updateMovie = async (req, res) => {
   movie.genres = genres;
   movie.tags = tags;
   movie.cast = cast;
-  // movie.trailer = trailer;
   movie.language = language;
 
   if (director) {
@@ -287,7 +286,23 @@ exports.getMoviesForUpdate = async (req, res) => {
         };
       }),
       writers: movie.writers.map((writer) => formatActor(writer)),
-      // trailer: movie.trailer,
     },
+  });
+};
+
+exports.searchMovies = async (req, res) => {
+  const { title } = req.query;
+  if (!title.trim()) return sendError(res, "Please enter a valid title");
+  const movies = await Movie.find({
+    title: { $regex: title, $options: "i" },
+  });
+  res.json({
+    results: movies.map((movie) => ({
+      id: movie._id,
+      title: movie.title,
+      poster: movie.poster?.url,
+      genres: movie.genres,
+      status: movie.status,
+    })),
   });
 };
