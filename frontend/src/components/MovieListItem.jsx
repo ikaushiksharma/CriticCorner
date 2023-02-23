@@ -1,7 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsTrash, BsBoxArrowUpRight, BsPencilSquare } from "react-icons/bs";
+import { deleteMovie } from "../api/movie";
+import { useNotification } from "../hooks";
+import ConfirmModal from "./modals/ConfirmModal";
+import UpdateMovie from "./modals/UpdateMovie";
 
-export default function MovieListItem({ movie, onDeleteClick, onEditClick, onOpenClick }) {
+export default function MovieListItem({ movie, afterDelete, afterUpdate }) {
+  const { updateNotification } = useNotification();
+  const [busy, setBusy] = useState(false);
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const handleOnDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteMovie(movie.id);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+    hideConfirmModal();
+    updateNotification("success", message);
+    afterDelete(movie);
+  };
+
+  const handleOnEditClick = () => {
+    setShowUpdateModal(true);
+    setSelectedMovieId(movie.id);
+  };
+  const handleOnUpdate = (movie) => {
+    afterUpdate(movie);
+    setShowUpdateModal(false);
+    setSelectedMovieId(null);
+  };
+
+  const displayConfirmModal = () => setShowConfirmModal(true);
+  const hideConfirmModal = () => setShowConfirmModal(false);
+  return (
+    <>
+      <MovieCard
+        movie={movie}
+        onDeleteClick={displayConfirmModal}
+        onEditClick={handleOnEditClick}
+      />
+      <div className="p-0">
+        <ConfirmModal
+          visible={showConfirmModal}
+          onConfirm={handleOnDeleteConfirm}
+          onCancel={hideConfirmModal}
+          busy={busy}
+          title="Are you sure?"
+          subtitle="This action will remove this movie permanently!"
+        />
+        <UpdateMovie
+          visible={showUpdateModal}
+          movieId={selectedMovieId}
+          onSuccess={handleOnUpdate}
+        />
+      </div>
+    </>
+  );
+}
+function MovieCard({ movie, onDeleteClick, onEditClick, onOpenClick }) {
   const { poster, title, status, genres = [] } = movie;
   return (
     <table className="w-full border-b">
