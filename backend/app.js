@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const userRouter = require("./routes/user.js");
 const actorRouter = require("./routes/actor.js");
 const movieRouter = require("./routes/movie.js");
+const reviewRouter = require("./routes/review.js");
 const errorHandler = require("./middlewares/error.js");
 const { handleNotFound } = require("./utils/helper");
 
@@ -30,6 +31,7 @@ app.use(morgan("dev"));
 app.use("/api/user", userRouter);
 app.use("/api/actor", actorRouter);
 app.use("/api/movie", movieRouter);
+app.use("/api/review", reviewRouter);
 app.use("/*", handleNotFound);
 
 app.use(errorHandler);
