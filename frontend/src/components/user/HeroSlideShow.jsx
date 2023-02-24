@@ -1,20 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, forwardRef } from "react";
 import { getLatestUploads } from "../../api/movie";
 import { useNotification } from "../../hooks";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
+import { Link } from "react-router-dom";
+
+let count = 0;
+let intervalId;
 export default function HeroSlideShow() {
   const slideRef = useRef();
   const clonedSlideRef = useRef();
   const [slide, setSlide] = useState({});
+  const [visible, setVisible] = useState(false);
+  const [upNext, setUpNext] = useState([]); // [slide, setSlide
   const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const { updateNotification } = useNotification();
   const fetchLatestUploads = async () => {
     const { error, movies } = await getLatestUploads();
     if (error) return updateNotification("error", error);
     setSlides([...movies]);
-    setSlide(movies[currentIndex]);
+    setSlide(movies[0]);
   };
 
   const handleAnimationEnd = () => {
@@ -27,48 +32,96 @@ export default function HeroSlideShow() {
     slideRef.current.classList.remove(...classes);
     clonedSlideRef.current.classList.remove(...classes);
     setClonedSlide({});
+    startSlideShow();
   };
 
-  useEffect(() => {
-    fetchLatestUploads();
-  }, []);
+  const startSlideShow = () => {
+    intervalId = setInterval(() => {
+      handleOnNextClick();
+    }, 3000);
+  };
+
+  const pauseSlideShow = () => {
+    clearInterval(intervalId);
+  };
+
+  const updateUpNext = (currentIndex) => {
+    if (!slides.length) return;
+    const upNextCount = currentIndex + 1;
+    const end = upNextCount + 3;
+    let newSlides = [...slides];
+    newSlides = newSlides.slice(upNextCount, end);
+    if (!newSlides.length) {
+      newSlides = [...slides].slice(0, 3);
+    }
+    setUpNext([...newSlides]);
+  };
 
   const handleOnNextClick = () => {
-    setClonedSlide(currentIndex);
-    const nextSlideIndex = (currentIndex + 1) % slides.length;
-    setSlide(slides[nextSlideIndex]);
-    setCurrentIndex(nextSlideIndex);
+    pauseSlideShow();
+    setClonedSlide(count);
+    count = (count + 1) % slides.length;
+    setSlide(slides[count]);
+
     clonedSlideRef.current.classList.add("slide-out-to-left");
     slideRef.current.classList.add("slide-in-from-right");
+    updateUpNext(count);
   };
   const handleOnPrevClick = () => {
-    setClonedSlide(currentIndex);
-    const prevSlideIndex = (currentIndex - 1 + slides.length) % slides.length;
-    setSlide(slides[prevSlideIndex]);
-    setCurrentIndex(prevSlideIndex);
+    pauseSlideShow();
+    setClonedSlide(count);
+    count = (count - 1 + slides.length) % slides.length;
+    setSlide(slides[count]);
     clonedSlideRef.current.classList.add("slide-out-to-right");
     slideRef.current.classList.add("slide-in-from-left");
+    updateUpNext(count);
   };
+  const handleOnVisibilityChange = () => {
+    const visibility = document.visibilityState;
+    if (visibility === "visible") {
+      setVisible(true);
+    }
+    if (visibility === "hidden") {
+      setVisible(false);
+    }
+  };
+  useEffect(() => {
+    fetchLatestUploads();
+    document.addEventListener("visibilitychange", handleOnVisibilityChange);
+
+    return () => {
+      pauseSlideShow();
+      document.removeEventListener("visibilitychange", handleOnVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (slides.length && visible) {
+      startSlideShow();
+      updateUpNext(count);
+    } else pauseSlideShow();
+  }, [slides.length, visible]);
   return (
     <div className="w-full flex">
       <div className="w-4/5 aspect-video relative overflow-hidden">
-        <img
-          onAnimationEnd={handleAnimationEnd}
-          ref={slideRef}
-          className="aspect-video object-cover"
-          src={slide.poster}
-          alt=""
-        />
-        <img
-          onAnimationEnd={handleAnimationEnd}
+        <Slide title={slide.title} src={slide.poster} ref={slideRef} id={slide.id} />
+        <Slide
           ref={clonedSlideRef}
-          className="aspect-video object-cover absolute inset-0"
+          onAnimationEnd={handleAnimationEnd}
+          className="absolute inset-0"
           src={clonedSlide.poster}
-          alt=""
+          title={clonedSlide.title}
+          id={slide.id}
         />
+
         <SlideShowController onNextClick={handleOnNextClick} onPrevClick={handleOnPrevClick} />
       </div>
-      <div className="w-1/5 aspect-video"></div>
+      <div className="w-1/5 space-y-3 px-3">
+        <h1 className="font-semibold text-2xl text-primary dark:text-white">Up Next</h1>
+        {upNext.map(({ poster, id }) => {
+          return <img key={id} className="aspect-video rounded object-cover" src={poster} alt="" />;
+        })}
+      </div>
     </div>
   );
 }
@@ -86,3 +139,19 @@ const SlideShowController = ({ onPrevClick, onNextClick }) => {
     </div>
   );
 };
+
+const Slide = forwardRef(({ props, ref }) => {
+  const { title, id, src, className = "", ...rest } = props;
+  return (
+    <Link to={"/movie/" + id} ref={ref} className={"w-full cursor-pointer block " + className} {...rest}>
+      {src ? <img className="aspect-video object-cover" src={src} alt="" /> : null}
+      {title ? (
+        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white dark:to-primary">
+          <h1 className="font-semibold text-4xl dark:text-highlight-dark text-highlight">
+            {title}
+          </h1>
+        </div>
+      ) : null}
+    </Link>
+  );
+});

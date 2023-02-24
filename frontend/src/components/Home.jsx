@@ -12,10 +12,11 @@ export default function Home() {
       <Container className="px-2 xl:p-0">
         <NotVerified />
         <HeroSlideShow />
-
-        <TopRatedMovies />
-        <TopRatedWebSeries />
-        <TopRatedTVSeries />
+        <div className="space-y-3 py-8">
+          <TopRatedMovies />
+          <TopRatedWebSeries />
+          <TopRatedTVSeries />
+        </div>
       </Container>
     </div>
   );
