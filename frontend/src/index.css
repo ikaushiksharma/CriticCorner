@@ -58,6 +58,54 @@
   background: rgb(143, 190, 245);
 }
 
+.slide-in-from-right {
+  animation: slideInFromRight 0.5s ease-in;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.slide-out-to-left {
+  animation: slideOutToLeft 0.5s ease-in;
+}
+@keyframes slideOutToLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.slide-in-from-left {
+  animation: slideInFromLeft 0.5s ease-in;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.slide-out-to-right {
+  animation: slideOutToRight 0.5s ease-in;
+}
+
+@keyframes slideOutToRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
