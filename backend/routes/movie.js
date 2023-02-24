@@ -6,6 +6,8 @@ const {
   removeMovie,
   getMovies,
   searchMovies,
+  getLatestUploads,
+  getSingleMovie,
 } = require("../controllers/movie");
 const { isAuth, isAdmin } = require("../middlewares/auth");
 const { parseData } = require("../middlewares/helper");
@@ -35,8 +37,14 @@ router.patch(
   validate,
   updateMovie,
 );
+//admin routes
 router.delete("/:movieId", isAuth, isAdmin, removeMovie);
 router.get("/movies", isAuth, isAdmin, getMovies);
 router.get("/for-update/:movieId", isAuth, isAdmin, getMovieForUpdate);
 router.get("/search", isAuth, isAdmin, searchMovies);
+
+// user routes
+router.get("/latest-uploads", getLatestUploads);
+router.get("/single/:movieId", getSingleMovie);
+
 module.exports = router;

@@ -1,6 +1,7 @@
 const cloudinary = require("../cloud");
 const { sendError, formatActor } = require("../utils/helper");
 const Movie = require("../models/movie");
+const Review = require("../models/review");
 const { isValidObjectId } = require("mongoose");
 
 exports.uploadTrailer = async (req, res) => {
@@ -304,5 +305,74 @@ exports.searchMovies = async (req, res) => {
       genres: movie.genres,
       status: movie.status,
     })),
+  });
+};
+
+exports.getLatestUploads = async (req, res) => {
+  const { limit = 5 } = req.query;
+  const movies = await Movie.find({ status: "public" }).sort("-createdAt").limit(limit);
+  res.json({
+    movies: movies.map((movie) => ({
+      id: movie._id,
+      title: movie.title,
+      poster: movie.poster?.url,
+      trailer: movie.trailer?.url,
+      storyLine: movie.storyLine,
+    })),
+  });
+};
+
+exports.getSingleMovie = async (req, res) => {
+  const { movieId } = req.params;
+  if (!isValidObjectId(movieId)) return sendError(res, "Invalid Movie Id!");
+  const movie = await Movie.findById(movieId).populate("director writers cast.actor");
+  const [aggregatedResponse] = await Review.aggregate(averageRatingPipeline(movie._id));
+  const reviews = {};
+  if (aggregatedResponse) {
+    const { ratingAvg, reviewCount } = aggregatedResponse;
+    reviews.ratingAvg = parseFloat(ratingAvg).toFixed(1);
+    reviews.reviewCount = reviewCount;
+  }
+  const {
+    _id: id,
+    title,
+    storyLine,
+    cast,
+    writers,
+    director,
+    releaseDate,
+    genres,
+    tags,
+    language,
+    poster,
+    trailer,
+    type,
+  } = movie;
+  res.json({
+    movie: {
+      id,
+      title,
+      storyLine,
+      releaseDate,
+      genres,
+      tags,
+      language,
+      type,
+      cast: cast.map((c) => ({
+        id: c._id,
+        profile: {
+          id: c.actor._id,
+          name: c.actor.name,
+          avatar: c.actor?.avatar?.url,
+        },
+        roleAs: c.roleAs,
+        leadActor: c.leadActor,
+      })),
+      writers: writers.map((w) => ({ id: w._id, name: w.name })),
+      director: { id: director._id, name: director.name },
+      reviews: { ...reviews },
+      poster: poster?.url,
+      trailer: trailer?.url,
+    },
   });
 };

@@ -34,3 +34,28 @@ exports.formatActor = (actor) => {
   const { _id, name, about, gender, avatar } = actor;
   return { id: _id, name, about, gender, avatar: avatar?.url };
 };
+
+exports.averageRatingPipeline = (movieId) => {
+  [
+    {
+      $lookup: {
+        from: "Review",
+        localField: "rating",
+        foreignField: "_id",
+        as: "avgRat",
+      },
+    },
+    {
+      $match: { parentMovie: movieId },
+    },
+    {
+      $group: {
+        _id: null,
+        ratingAvg: { $avg: "$rating" },
+      },
+      reviewCount: {
+        $sum: 1,
+      },
+    },
+  ];
+};
