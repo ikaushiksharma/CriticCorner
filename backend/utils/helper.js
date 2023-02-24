@@ -1,10 +1,9 @@
 const crypto = require("crypto");
 const cloudinary = require("../cloud");
-
+const Review = require("../models/review");
 exports.sendError = (res, error, statusCode = 401) => {
   res.status(statusCode).json({ error });
 };
-
 exports.generateRandomByte = () => {
   return new Promise((resolve, reject) => {
     crypto.randomBytes(30, (err, buff) => {
@@ -19,7 +18,6 @@ exports.generateRandomByte = () => {
 exports.handleNotFound = (req, res) => {
   this.sendError(res, "Not found", 404);
 };
-
 exports.uploadImageToCloud = async (file) => {
   const { secure_url: url, public_id } = await cloudinary.uploader.upload(file, {
     gravity: "face",
@@ -29,14 +27,12 @@ exports.uploadImageToCloud = async (file) => {
   });
   return { url, public_id };
 };
-
 exports.formatActor = (actor) => {
   const { _id, name, about, gender, avatar } = actor;
   return { id: _id, name, about, gender, avatar: avatar?.url };
 };
-
 exports.averageRatingPipeline = (movieId) => {
-  [
+  return [
     {
       $lookup: {
         from: "Review",
@@ -56,6 +52,79 @@ exports.averageRatingPipeline = (movieId) => {
       reviewCount: {
         $sum: 1,
       },
+    },
+  ];
+};
+exports.topRatedMoviesPipeline = (type) => {
+  return [
+    {
+      $lookup: {
+        from: "Movie",
+        localField: "reviews",
+        foreignField: "_id",
+        as: "topRated",
+      },
+    },
+    {
+      $match: {
+        reviews: {
+          $exists: true,
+        },
+        status: { $eq: "public" },
+        type: { $eq: type },
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        poster: "$poster.url",
+        reviewCount: { $size: "$reviews" },
+      },
+    },
+    {
+      $sort: {
+        reviewCount: -1,
+      },
+    },
+    {
+      $limit: 5,
+    },
+  ];
+};
+exports.getAverageRatings = async (movieId) => {
+  const [aggregatedResponse] = await Review.aggregate(this.averageRatingPipeline(movieId));
+  const reviews = {};
+  if (aggregatedResponse) {
+    const { ratingAvg, reviewCount } = aggregatedResponse;
+    reviews.ratingAvg = parseFloat(ratingAvg).toFixed(1);
+    reviews.reviewCount = reviewCount;
+  }
+  return reviews;
+};
+exports.relatedMovieAggregation = (tags, movieId) => {
+  return [
+    {
+      $lookup: {
+        from: "Movie",
+        localField: "tags",
+        foreignField: "_id",
+        as: "relatedMovies",
+      },
+    },
+    {
+      $match: {
+        tags: { $in: [...tags] },
+        _id: { $ne: movieId },
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        poster: "$poster.url",
+      },
+    },
+    {
+      $limit: 5,
     },
   ];
 };
