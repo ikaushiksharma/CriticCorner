@@ -5,6 +5,7 @@ const {
   getAverageRating,
   topRatedMoviesPipeline,
   getAverageRatings,
+  relatedMovieAggregation,
 } = require("../utils/helper");
 const Movie = require("../models/movie");
 const Review = require("../models/review");
@@ -87,19 +88,10 @@ exports.createMovie = async (req, res) => {
   }
   await newMovie.save();
   res.status(201).json({
-    id: newMovie._id,
-    title,
-    storyLine,
-    director,
-    releaseDate,
-    status,
-    type,
-    genres,
-    tags,
-    cast,
-    writers,
-    trailer,
-    language,
+    movie: {
+      id: newMovie._id,
+      title,
+    },
   });
 };
 
@@ -259,7 +251,8 @@ exports.getMovies = async (req, res) => {
   const results = movies.map((movie) => ({
     id: movie._id,
     title: movie.title,
-    poster: movie.poster,
+    poster: movie.poster?.url,
+    responsivePosters: m.poster?.responsive,
     genres: movie.genres,
     status: movie.status,
   }));
@@ -322,6 +315,7 @@ exports.getLatestUploads = async (req, res) => {
       id: movie._id,
       title: movie.title,
       poster: movie.poster?.url,
+      responsivePosters: movie.poster?.responsive,
       trailer: movie.trailer?.url,
       storyLine: movie.storyLine,
     })),
@@ -388,6 +382,7 @@ exports.getRelatedMovies = async (req, res) => {
       id: m._id,
       title: m.title,
       poster: m.poster,
+      responsivePosters: m.responsivePosters,
       reviews: { ...reviews },
     };
   };
@@ -403,6 +398,7 @@ exports.getTopRatedMovies = async (req, res) => {
       id: m._id,
       title: m.title,
       poster: m.poster,
+      responsivePosters: m.responsivePosters,
       reviews: { ...reviews },
     };
   };
