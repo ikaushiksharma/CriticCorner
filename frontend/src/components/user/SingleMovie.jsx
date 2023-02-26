@@ -5,6 +5,7 @@ import { getSingleMovie } from "../../api/movie";
 import { useAuth, useNotification } from "../../hooks";
 import CustomButtonLink from "../CustomButtonLink";
 import AddRatingModal from "../modals/AddRatingModal";
+import ProfileModal from "../modals/ProfileModal";
 import RatingStar from "../RatingStar";
 import RelatedMovies from "../RelatedMovies";
 
@@ -16,6 +17,8 @@ const convertDate = (date = "") => date.split("T")[0];
 export default function SingleMovie() {
   const [ready, setReady] = useState({});
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState({});
   const [movie, setMovie] = useState(false);
   const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
@@ -36,6 +39,14 @@ export default function SingleMovie() {
   };
   const hideRatingModal = () => {
     setShowRatingModal(false);
+  };
+  const hideProfileModal = () => {
+    setShowProfileModal(false);
+  };
+
+  const handleProfileClick = (profile) => {
+    setSelectedProfile(profile);
+    setShowProfileModal(true)
   };
 
   const handleOnRatingSuccess = (reviews) => {
@@ -88,18 +99,28 @@ export default function SingleMovie() {
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
           <ListWithLabel label="Director:">
-            <CustomButtonLink label={director.name} />
+            <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} />
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">
             {writers.map((writer) => (
-              <CustomButtonLink key={writer.id} label={writer.name} />
+              <CustomButtonLink
+                key={writer.id}
+                label={writer.name}
+                onClick={() => handleProfileClick(writer)}
+              />
             ))}
           </ListWithLabel>
 
           <ListWithLabel label="Cast:">
             {cast.map(({ id, profile, leadActor }) => {
-              return leadActor ? <CustomButtonLink key={id} label={profile.name} /> : null;
+              return leadActor ? (
+                <CustomButtonLink
+                  key={id}
+                  label={profile.name}
+                  onClick={() => handleProfileClick(profile)}
+                />
+              ) : null;
             })}
           </ListWithLabel>
 
@@ -125,6 +146,11 @@ export default function SingleMovie() {
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
+      <ProfileModal
+        visible={showProfileModal}
+        onClose={hideProfileModal}
+        profileId={selectedProfile.id}
+      />
       <AddRatingModal
         visible={showRatingModal}
         onClose={hideRatingModal}

@@ -85,7 +85,7 @@ exports.getSingleActor = async (req, res) => {
   if (!isValidObjectId(actorId)) return sendError(res, "Invalid Request!");
   const actor = await Actor.findById(actorId);
   if (!actor) return sendError(res, "Invalid Request!, actor not found", 404);
-  res.json(formatActor(actor));
+  res.json({ actor: formatActor(actor) });
 };
 exports.getActors = async (req, res) => {
   const { pageNo, limit } = req.query;
