@@ -24,7 +24,7 @@ exports.addReview = async (req, res) => {
   await newReview.save();
   const reviews = await getAverageRatings(movie._id);
 
-  res.json({ message: "Review added successfully",reviews });
+  res.json({ message: "Review added successfully", reviews });
 };
 
 exports.updateReview = async (req, res) => {
@@ -62,7 +62,7 @@ exports.getReviewsByMovie = async (req, res) => {
         select: "name",
       },
     })
-    .select("reviews");
+    .select("reviews title");
   if (!movie) return sendError(res, "Movie Not Found", 404);
   const reviews = movie.reviews.map((r) => {
     const { owner, content, rating, _id: reviewId } = r;
@@ -77,5 +77,5 @@ exports.getReviewsByMovie = async (req, res) => {
       rating,
     };
   });
-  res.json({ reviews });
+  res.json({ movie: { title: movie.title, reviews } });
 };

@@ -7,6 +7,8 @@ import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../modals/ConfirmModal";
+import NotFoundText from "../NotFoundText";
+import EditRatingModal from "../modals/EditRatingModal";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -15,17 +17,21 @@ const getNameInitial = (name = "") => {
 export default function MovieReviews() {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
+  const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [busy, setBusy] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedReview, setSelectedReview] = useState(null);
 
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
   const { updateNotification } = useNotification();
   const fetchReviews = async () => {
-    const { error, reviews } = await getReviewByMovie(movieId);
+    const { error, movie } = await getReviewByMovie(movieId);
+    const { title, reviews } = movie;
     if (error) return updateNotification("error", error);
+    setMovieTitle(title);
     setReviews([...reviews]);
   };
 
@@ -37,6 +43,36 @@ export default function MovieReviews() {
   };
   const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
+
+  const handleOnEditClick = () => {
+    const { id, content, rating } = profileOwnersReview;
+    setSelectedReview({
+      id,
+      content,
+      rating,
+    });
+    setShowEditModal(true);
+  };
+
+  const handleOnReviewUpdate = (review) => {
+    const updatedReview = {
+      ...profileOwnersReview,
+      rating: review.rating,
+      content: review.content,
+    };
+    setProfileOwnersReview(updatedReview);
+    const newReviews = reviews.map((r) => {
+      if (r.id === updatedReview.id) return updatedReview;
+      return r;
+    });
+    setReviews([...newReviews]);
+    hideEditModal();
+  };
+
+  const hideEditModal = () => {
+    setShowEditModal(false);
+    setSelectedReview(null);
+  };
 
   const handleOnDeleteConfirm = async () => {
     setBusy(true);
@@ -63,7 +99,7 @@ export default function MovieReviews() {
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
               Reviews for:
             </span>{" "}
-            This is the title
+            {movieTitle}
           </h1>
           {profileId ? (
             <CustomButtonLink
@@ -72,6 +108,9 @@ export default function MovieReviews() {
             />
           ) : null}
         </div>
+
+        <NotFoundText text="No Reviews !" visible={!reviews.length} />
+
         {profileOwnersReview ? (
           <ReviewCard review={profileOwnersReview} />
         ) : (
@@ -83,7 +122,7 @@ export default function MovieReviews() {
                   <button onClick={displayConfirmModal} type="button">
                     <BsTrash />
                   </button>
-                  <button type="button">
+                  <button onClick={handleOnEditClick} type="button">
                     <BsPencilSquare />
                   </button>
                 </div>
@@ -99,6 +138,12 @@ export default function MovieReviews() {
         title="Are you sure?"
         subtitle="This will remove this review permanently."
         busy={busy}
+      />
+      <EditRatingModal
+        visible={showEditModal}
+        onSuccess={handleOnReviewUpdate}
+        onClose={hideEditModal}
+        initialState={selectedReview}
       />
     </div>
   );
