@@ -56,6 +56,15 @@ exports.averageRatingPipeline = (movieId) => {
   ];
 };
 exports.topRatedMoviesPipeline = (type) => {
+  const matchOptions = {
+    reviews: {
+      $exists: true,
+    },
+    status: { $eq: "public" },
+  };
+
+  if (type) matchOptions.type = { $eq: type };
+
   return [
     {
       $lookup: {
@@ -66,13 +75,7 @@ exports.topRatedMoviesPipeline = (type) => {
       },
     },
     {
-      $match: {
-        reviews: {
-          $exists: true,
-        },
-        status: { $eq: "public" },
-        type: { $eq: type },
-      },
+      $match: matchOptions,
     },
     {
       $project: {

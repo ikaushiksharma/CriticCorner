@@ -7,6 +7,7 @@ const userRouter = require("./routes/user.js");
 const actorRouter = require("./routes/actor.js");
 const movieRouter = require("./routes/movie.js");
 const reviewRouter = require("./routes/review.js");
+const adminRouter = require("./routes/admin.js");
 const errorHandler = require("./middlewares/error.js");
 const { handleNotFound } = require("./utils/helper");
 
@@ -32,6 +33,7 @@ app.use("/api/user", userRouter);
 app.use("/api/actor", actorRouter);
 app.use("/api/movie", movieRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/admin", adminRouter);
 app.use("/*", handleNotFound);
 
 app.use(errorHandler);

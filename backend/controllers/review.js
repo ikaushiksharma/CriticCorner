@@ -7,6 +7,7 @@ exports.addReview = async (req, res) => {
   const { movieId } = req.params;
   const { content, rating } = req.body;
   const { user } = req;
+  if (!req.user.isVerified) return sendError(res, "Please Verify Your Email First!");
   if (!isValidObjectId(movieId)) return sendError(res, "Invalid Movie");
   const movie = await Movie.findOne({ _id: movieId, status: "public" });
   if (!movie) return sendError(res, "Movie Not Found", 404);
