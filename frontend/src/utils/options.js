@@ -7,8 +7,8 @@ export const typeOptions = [
 ];
 
 export const statusOptions = [
-  { title: "Public", value: "Public" },
-  { title: "Private", value: "Private" },
+  { title: "Public", value: "public" },
+  { title: "Private", value: "private" },
 ];
 
 export const languageOptions = [

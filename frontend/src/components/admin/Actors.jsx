@@ -24,7 +24,7 @@ export default function Actors() {
     const { profiles, error } = await getActors(pageNo, limit);
     if (error) return updateNotification("error", error);
     if (!profiles.length) {
-      currentPageNo = pageNo - 1;
+      currentPageNo = pageNo;
       return setReachedToEnd(true);
     }
     setActors([...profiles]);

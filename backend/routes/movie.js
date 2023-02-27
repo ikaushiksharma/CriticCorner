@@ -11,6 +11,7 @@ const {
   getRelatedMovies,
   getTopRatedMovies,
   searchPublicMovies,
+  getMoviesForUpdate,
 } = require("../controllers/movie");
 const { isAuth, isAdmin } = require("../middlewares/auth");
 const { parseData } = require("../middlewares/helper");
@@ -43,7 +44,7 @@ router.patch(
 //admin routes
 router.delete("/:movieId", isAuth, isAdmin, removeMovie);
 router.get("/movies", isAuth, isAdmin, getMovies);
-router.get("/for-update/:movieId", isAuth, isAdmin, getMovieForUpdate);
+router.get("/for-update/:movieId", isAuth, isAdmin, getMoviesForUpdate);
 router.get("/search", isAuth, isAdmin, searchMovies);
 
 // user routes

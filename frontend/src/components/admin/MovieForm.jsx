@@ -61,7 +61,7 @@ export default function MovieForm({ onSubmit, btnTitle, initialState, busy }) {
     finalMovieInfo.cast = JSON.stringify(finalCast);
 
     if (writers.length) {
-      const finalWriters = writers.map((c) => c.id);
+      const finalWriters = writers.map((w) => w.id);
       finalMovieInfo.writers = JSON.stringify(finalWriters);
     }
     if (director.id) finalMovieInfo.director = director.id;
@@ -102,7 +102,6 @@ export default function MovieForm({ onSubmit, btnTitle, initialState, busy }) {
     setMovieInfo({ ...movieInfo, genres });
   };
   const updateWriters = (profile) => {
-    const { writers } = profile;
     for (let writer of writers) {
       if (writer.id === profile.id)
         updateNotification("warning", "This profile is already selected!");

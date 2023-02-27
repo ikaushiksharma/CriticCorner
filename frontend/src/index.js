@@ -7,10 +7,14 @@ import "./index.css";
 import ContextProviders from "./context";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <ContextProviders>
-      <App />
-    </ContextProviders>
-  </BrowserRouter>,
-  document.getElementById("root")
+  <React.StrictMode>
+    {" "}
+    <BrowserRouter>
+      <ContextProviders>
+        <App />
+      </ContextProviders>
+    </BrowserRouter>
+    ,
+  </React.StrictMode>,
+  document.getElementById("root"),
 );

@@ -90,7 +90,7 @@ export const deleteMovie = async (id) => {
 export const searchMovieForAdmin = async (title) => {
   const token = getToken();
   try {
-    const { data } = await client(`/movie?search?title=${title}`, {
+    const { data } = await client(`/movie/search?title=${title}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -104,7 +104,7 @@ export const searchMovieForAdmin = async (title) => {
 export const getTopRatedMovies = async (type, signal) => {
   try {
     let endpoint = "/movie/top-rated";
-    if (type) endpoint = endpoint + "?type" + type;
+    if (type) endpoint = endpoint + "?type=" + type;
     const { data } = await client(endpoint, { signal });
     return data;
   } catch (error) {
@@ -121,7 +121,7 @@ export const getLatestUploads = async (type, signal) => {
 };
 export const getSingleMovie = async (id) => {
   try {
-    const { data } = await client("/movie/single" + id);
+    const { data } = await client("/movie/single/" + id);
     return data;
   } catch (error) {
     return catchError(error);
@@ -129,7 +129,7 @@ export const getSingleMovie = async (id) => {
 };
 export const getRelatedMovies = async (id) => {
   try {
-    const { data } = await client("/movie/related" + id);
+    const { data } = await client("/movie/related/" + id);
     return data;
   } catch (error) {
     return catchError(error);

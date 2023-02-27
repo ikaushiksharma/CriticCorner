@@ -127,18 +127,17 @@ const SearchResults = ({
 
 const ResultCard = forwardRef(
   ({ item, renderItem, resultContainerStyle, selectedResultStyle, onClick }, ref) => {
-    const getClasses = () => {
-      if (resultContainerStyle) return resultContainerStyle + " " + selectedResultStyle;
-      return (
-        selectedResultStyle +
-        // (index === focusedIndex ? "dark:bg-dark-subtle bg-light-subtle" : "") +
-        " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition"
-      );
-    };
+  const getClasses = () => {
+    if (resultContainerStyle) return resultContainerStyle + " " + selectedResultStyle;
     return (
-      <div onClick={onClick} ref={ref} key={item.id} className={getClasses()}>
-        {renderItem(item)}
-      </div>
+      selectedResultStyle +
+      // (index === focusedIndex ? "dark:bg-dark-subtle bg-light-subtle" : "") +
+      " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition"
     );
-  },
-);
+  };
+  return (
+    <div onClick={onClick} ref={ref} key={item.id} className={getClasses()}>
+      {renderItem(item)}
+    </div>
+  );
+});

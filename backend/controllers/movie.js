@@ -49,6 +49,8 @@ exports.createMovie = async (req, res) => {
     trailer,
     language,
   });
+
+  console.log(newMovie)
   if (director) {
     if (!isValidObjectId(director)) return sendError(res, "Invalid director id!");
     newMovie.director = director;
@@ -252,7 +254,7 @@ exports.getMovies = async (req, res) => {
     id: movie._id,
     title: movie.title,
     poster: movie.poster?.url,
-    responsivePosters: m.poster?.responsive,
+    responsivePosters: movie.poster?.responsive,
     genres: movie.genres,
     status: movie.status,
   }));

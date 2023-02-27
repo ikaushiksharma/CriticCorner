@@ -1,6 +1,6 @@
 import React from "react";
 import NotVerified from "./user/NotVerified";
-import Container from "../Container";
+import Container from "../components/Container";
 import TopRatedMovies from "./user/TopRatedMovies";
 import TopRatedWebSeries from "./user/TopRatedWebSeries";
 import TopRatedTVSeries from "./user/TopRatedTVSeries";
@@ -17,7 +17,6 @@ export default function Home() {
           <TopRatedWebSeries />
           <TopRatedTVSeries />
         </div>
-        
       </Container>
     </div>
   );

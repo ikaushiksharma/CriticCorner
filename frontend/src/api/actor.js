@@ -31,7 +31,7 @@ export const updateActor = async (id, formData) => {
 export const deleteActor = async (id) => {
   const token = getToken();
   try {
-    const { data } = await client.post(`/actor/${id}`, {
+    const { data } = await client.delete(`/actor/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -57,7 +57,7 @@ export const searchActor = async (query) => {
 export const getActors = async (pageNo, limit) => {
   const token = getToken();
   try {
-    const { data } = await client(`/actor/actors/pageNo=${pageNo}&limit=${limit}`, {
+    const { data } = await client(`/actor/actors/?pageNo=${pageNo}&limit=${limit}`, {
       headers: {
         Authorization: "Bearer " + token,
         "content-type": "mulitpart/form-data",

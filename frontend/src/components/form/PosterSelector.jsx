@@ -13,7 +13,7 @@ export default function PosterSelector({
 }) {
   return (
     <div>
-      <input accept={accept} onChange={onChange} id={name} type="file" hidden />
+      <input accept={accept} onChange={onChange} name={name}  id={name} type="file" hidden />
       <label htmlFor={name}>
         {selectedPoster ? (
           <img

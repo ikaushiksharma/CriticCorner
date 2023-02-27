@@ -1,6 +1,6 @@
-import { Container } from "postcss";
+import Container from "../Container";
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie";
 import { useAuth, useNotification } from "../../hooks";
 import { convertReviewCount } from "../../utils/helper";
@@ -16,13 +16,13 @@ export default function SingleMovie() {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState({});
-  const [movie, setMovie] = useState(false);
+  const [movie, setMovie] = useState({});
   const { updateNotification } = useNotification();
   const { authInfo } = useAuth();
   const navigate = useNavigate();
   const { isLoggedIn } = authInfo;
 
-  const { movieId } = useParams;
+  const { movieId } = useParams();
   const fetchMovie = async () => {
     const { error, movie } = await getSingleMovie(movieId);
     if (error) return updateNotification("error", error);
@@ -96,7 +96,7 @@ export default function SingleMovie() {
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
           <ListWithLabel label="Director:">
-            <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} />
+            {/* <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} /> */}
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">

@@ -4,5 +4,6 @@ exports.parseData = (req, res, next) => {
   if (cast) req.body.cast = JSON.parse(cast);
   if (tags) req.body.tags = JSON.parse(tags);
   if (writers) req.body.writers = JSON.parse(writers);
+  if (trailer) req.body.trailer = JSON.parse(trailer);
   next();
 };

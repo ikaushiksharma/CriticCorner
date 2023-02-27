@@ -12,9 +12,9 @@ export default function Selector({ name, value, options, onChange, label }) {
       <option value="">{label}</option>
       {options.map(({ title, value }) => {
         return (
-          <select key={title} value={value}>
+          <option key={title} value={value}>
             {title}
-          </select>
+          </option>
         );
       })}
     </select>

@@ -16,8 +16,7 @@ const validateUserInfo = ({ email, password }) => {
   if (!isValidEmail(email)) return { ok: false, error: "Invalid email!" };
 
   if (!password.trim()) return { ok: false, error: "Password is missing!" };
-  if (password.length < 8)
-    return { ok: false, error: "Password must be 8 characters long!" };
+  if (password.length < 8) return { ok: false, error: "Password must be 8 characters long!" };
 
   return { ok: true };
 };
@@ -38,7 +37,7 @@ export default function Signin() {
     setUserInfo({ ...userInfo, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const { ok, error } = validateUserInfo(userInfo);
 

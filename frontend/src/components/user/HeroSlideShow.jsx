@@ -13,7 +13,7 @@ export default function HeroSlideShow() {
   const clonedSlideRef = useRef();
   const [slide, setSlide] = useState({});
   const [visible, setVisible] = useState(false);
-  const [upNext, setUpNext] = useState([]); // [slide, setSlide
+  const [upNext, setUpNext] = useState([]);
   const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
   const { updateNotification } = useNotification();
@@ -148,7 +148,7 @@ const SlideShowController = ({ onPrevClick, onNextClick }) => {
   );
 };
 
-const Slide = forwardRef(({ props, ref }) => {
+const Slide = forwardRef((props, ref) => {
   const { title, id, src, className = "", ...rest } = props;
   return (
     <Link
@@ -159,7 +159,7 @@ const Slide = forwardRef(({ props, ref }) => {
     >
       {src ? <img className="aspect-video object-cover" src={src} alt="" /> : null}
       {title ? (
-        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white via-transparent dark:to-primary dark:via-transparent">
+        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white via-transparent dark:from-primary  dark:via-transparent">
           <h1 className="font-semibold text-4xl dark:text-highlight-dark text-highlight">
             {title}
           </h1>

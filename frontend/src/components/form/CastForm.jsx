@@ -53,6 +53,7 @@ export default function CastForm({ onSubmit }) {
       />
       <LiveSearch
         placeholder="Search profile"
+        name="cast"
         value={profile.name}
         results={profiles}
         onSelect={handleProfileSelect}

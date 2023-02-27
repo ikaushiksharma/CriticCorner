@@ -56,7 +56,7 @@ export default function GenresModal({ visible, previousSelection, onClose, onSub
   );
 }
 
-const Genre = ({ children, selected, onClick, key }) => {
+const Genre = ({ children, selected, onClick }) => {
   const getSelectedStyle = () => {
     return selected
       ? "dark:bg-white dark:text-primary bg-light-subtle text-white"
@@ -64,7 +64,6 @@ const Genre = ({ children, selected, onClick, key }) => {
   };
   return (
     <button
-      key={key}
       onClick={onClick}
       className={
         getSelectedStyle() +

@@ -21,7 +21,7 @@ export default function TagsInput({ name, value, onChange }) {
       setTag("");
     }
     if (key === "Backspace" && !tag && tags.length) {
-      const newTags = tags.filter((_, index) => index === tags.length - 1);
+      const newTags = tags.filter((_, index) => index !== tags.length - 1);
       setTags([...newTags]);
     }
   };
@@ -59,7 +59,7 @@ export default function TagsInput({ name, value, onChange }) {
         ref={input}
         type="text"
         placeholder="Tag one, Tag two, Tag three..."
-        className="h-full flex-grow bg-transparent outline-none dark:text-white"
+        className="h-full flex-grow bg-transparent outline-none dark:text-white text-primary"
         value={tag}
         onChange={handleOnChange}
         onFocus={handleOnFocus}

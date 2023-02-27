@@ -22,14 +22,15 @@ const MovieUpload = ({ visible, onClose }) => {
   };
 
   const handleTypeError = (error) => {
-    updateNotification("error", error);
+    return updateNotification("error", error);
   };
 
   const handleUploadTrailer = async (data) => {
     const { error, url, public_id } = await uploadTrailer(data, setUploadProgress);
-    if (error) updateNotification("error", error);
+    if (error) return updateNotification("error", error);
     setVideoUploaded(true);
     setVideoInfo({ url, public_id });
+    console.log("trailer uploaded");
   };
   const handleChange = (file) => {
     const formData = new FormData();
@@ -49,7 +50,7 @@ const MovieUpload = ({ visible, onClose }) => {
       return updateNotification("error", "Please upload a trailer");
     setBusy(true);
     data.append("trailer", JSON.stringify(videoInfo));
-    const { error, movie } = await uploadMovie(data);
+    const { error } = await uploadMovie(data);
     setBusy(false);
     if (error) return updateNotification("error", error);
     updateNotification("success", "Movie Uploaded Successfully");
