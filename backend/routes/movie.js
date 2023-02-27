@@ -10,6 +10,7 @@ const {
   getSingleMovie,
   getRelatedMovies,
   getTopRatedMovies,
+  searchPublicMovies,
 } = require("../controllers/movie");
 const { isAuth, isAdmin } = require("../middlewares/auth");
 const { parseData } = require("../middlewares/helper");
@@ -50,5 +51,6 @@ router.get("/latest-uploads", getLatestUploads);
 router.get("/single/:movieId", getSingleMovie);
 router.get("/related/:movieId", getRelatedMovies);
 router.get("/top-rated", getTopRatedMovies);
+router.get("/search-public", searchPublicMovies);
 
 module.exports = router;

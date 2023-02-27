@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 let count = 0;
 let intervalId;
+let newTime = 0;
+let lastTime = 0;
 export default function HeroSlideShow() {
   const slideRef = useRef();
   const clonedSlideRef = useRef();
@@ -37,8 +39,11 @@ export default function HeroSlideShow() {
 
   const startSlideShow = () => {
     intervalId = setInterval(() => {
+      newTime = Date.now();
+      const delta = newTime - lastTime;
+      if (delta < 4000) return clearInterval(intervalId);
       handleOnNextClick();
-    }, 3000);
+    }, 3500);
   };
 
   const pauseSlideShow = () => {
@@ -58,6 +63,7 @@ export default function HeroSlideShow() {
   };
 
   const handleOnNextClick = () => {
+    lastTime = Date.now();
     pauseSlideShow();
     setClonedSlide(count);
     count = (count + 1) % slides.length;
@@ -105,7 +111,7 @@ export default function HeroSlideShow() {
   }, [slides.length, visible]);
   return (
     <div className="w-full flex">
-      <div className="w-4/5 aspect-video relative overflow-hidden">
+      <div className="md:w-4/5 w-full aspect-video relative overflow-hidden">
         <Slide title={slide.title} src={slide.poster} ref={slideRef} id={slide.id} />
         <Slide
           ref={clonedSlideRef}
@@ -118,7 +124,7 @@ export default function HeroSlideShow() {
 
         <SlideShowController onNextClick={handleOnNextClick} onPrevClick={handleOnPrevClick} />
       </div>
-      <div className="w-1/5 space-y-3 px-3">
+      <div className="w-1/5 md:block hidden space-y-3 px-3">
         <h1 className="font-semibold text-2xl text-primary dark:text-white">Up Next</h1>
         {upNext.map(({ poster, id }) => {
           return <img key={id} className="aspect-video rounded object-cover" src={poster} alt="" />;
