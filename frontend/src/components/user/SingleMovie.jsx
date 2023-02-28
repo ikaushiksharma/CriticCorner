@@ -79,7 +79,7 @@ export default function SingleMovie() {
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
       <Container className="xl:px-0 px-2">
-        <video poster={poster} src={trailer}></video>
+        <video className="w-full" controls poster={poster} src={trailer}></video>
         <div className="flex justify-between">
           <h1 className="xl:text-4xl lg:text-3xl text-2xl text-highlight dark:text-highlight-dark font-semibold py-3">
             {title}
@@ -96,7 +96,7 @@ export default function SingleMovie() {
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
           <ListWithLabel label="Director:">
-            {/* <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} /> */}
+            <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} />
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">
@@ -168,7 +168,7 @@ const ListWithLabel = ({ label, children }) => {
 
 const CastProfiles = ({ cast }) => {
   return (
-    <div className="">
+    <div>
       <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">Cast:</h1>
       <div className="flex flex-wrap space-x-4">
         {cast.map(({ id, profile, roleAs }) => {

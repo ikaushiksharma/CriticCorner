@@ -15,13 +15,16 @@ export const addReview = async (movieId, reviewData) => {
 };
 
 export const getReviewByMovie = async (movieId) => {
-  const token = getToken();
+  // const token = getToken();
   try {
-    const { data } = await client("/review/get-reviews-by-movie/" + movieId, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+    const { data } = await client(
+      "/review/get-reviews-by-movie/" + movieId,
+      // {
+      //   headers: {
+      //     Authorization: "Bearer " + token,
+      //   },
+      // });
+    );
     return data;
   } catch (error) {
     return catchError(error);
