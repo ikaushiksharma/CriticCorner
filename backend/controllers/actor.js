@@ -1,9 +1,7 @@
 const Actor = require("../models/actor");
 const { sendError, uploadImageToCloud, formatActor } = require("../utils/helper");
-const dotenv = require("dotenv");
 const cloudinary = require("../cloud");
 const { isValidObjectId } = require("mongoose");
-dotenv.config();
 
 exports.create = async (req, res) => {
   const { name, about, gender } = req.body;
