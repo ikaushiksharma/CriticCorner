@@ -15,8 +15,13 @@ export const addReview = async (movieId, reviewData) => {
 };
 
 export const getReviewByMovie = async (movieId) => {
+  const token = getToken();
   try {
-    const { data } = await client("/review/get-reviews-by-movie/" + movieId);
+    const { data } = await client("/review/get-reviews-by-movie/" + movieId, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
     return data;
   } catch (error) {
     return catchError(error);
@@ -35,10 +40,10 @@ export const deleteReview = async (reviewId) => {
     return catchError(error);
   }
 };
-export const updateReview = async (reviewId,reviewData) => {
+export const updateReview = async (reviewId, reviewData) => {
   const token = getToken();
   try {
-    const { data } = await client.patch("/review/" + reviewId,reviewData, {
+    const { data } = await client.patch("/review/" + reviewId, reviewData, {
       headers: {
         Authorization: "Bearer " + token,
       },
