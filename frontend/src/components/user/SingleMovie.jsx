@@ -12,7 +12,7 @@ import RelatedMovies from "../RelatedMovies";
 
 const convertDate = (date = "") => date.split("T")[0];
 export default function SingleMovie() {
-  const [ready, setReady] = useState({});
+  const [ready, setReady] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState({});
@@ -26,8 +26,8 @@ export default function SingleMovie() {
   const fetchMovie = async () => {
     const { error, movie } = await getSingleMovie(movieId);
     if (error) return updateNotification("error", error);
-    setReady(true);
     setMovie(movie);
+    setReady(true);
   };
 
   const handleOnRateMovie = () => {
@@ -76,6 +76,7 @@ export default function SingleMovie() {
     reviews = {},
   } = movie;
 
+  console.log('inside yakhsit ki mummy')
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
       <Container className="xl:px-0 px-2">
@@ -96,7 +97,10 @@ export default function SingleMovie() {
         <div className="space-y-3">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
           <ListWithLabel label="Director:">
-            <CustomButtonLink label={director.name} onClick={() => handleProfileClick(director)} />
+            <CustomButtonLink
+              label={director.name || ""}
+              onClick={() => handleProfileClick(director)}
+            />
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">
@@ -139,7 +143,7 @@ export default function SingleMovie() {
             <CustomButtonLink label={type} clickable={false} />
           </ListWithLabel>
 
-          <CastProfiles cast={cast} />
+          <CastProfiles onOpenProfile={handleProfileClick} cast={cast} />
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
@@ -166,14 +170,14 @@ const ListWithLabel = ({ label, children }) => {
   );
 };
 
-const CastProfiles = ({ cast }) => {
+const CastProfiles = ({ cast,onOpenProfile }) => {
   return (
     <div>
       <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">Cast:</h1>
       <div className="flex flex-wrap space-x-4">
         {cast.map(({ id, profile, roleAs }) => {
           return (
-            <div key={id} className="basis-28 flex flex-col items-center text-center mb-4">
+            <div onClick={()=>onOpenProfile(id)} key={id} className="basis-28 flex flex-col items-center text-center mb-4">
               <img
                 className="w-24 h-24 aspect-square object-cover rounded-full"
                 src={profile.avatar}

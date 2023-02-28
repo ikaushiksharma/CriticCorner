@@ -35,7 +35,7 @@ exports.update = async (req, res) => {
 
   if (file) {
     const { url, public_id } = await uploadImageToCloud(file.path);
-    newActor.avatar = { public_id, url };
+    actor.avatar = { public_id, url };
   }
   actor.name = name;
   actor.about = about;

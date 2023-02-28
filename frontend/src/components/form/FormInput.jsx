@@ -4,6 +4,7 @@ export default function FormInput({ name, label, placeholder, ...rest }) {
   return (
     <div className="flex flex-col-reverse">
       <input
+        autoComplete="on"
         id={name}
         name={name}
         className="bg-transparent rounded border-2 dark:border-dark-subtle border-light-subtle w-full text-lg outline-none dark:focus:border-white focus:border-primary p-1 dark:text-white peer transition"

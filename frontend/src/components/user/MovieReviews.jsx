@@ -11,7 +11,7 @@ import NotFoundText from "../NotFoundText";
 import EditRatingModal from "../modals/EditRatingModal";
 
 const getNameInitial = (name = "") => {
-  return name[0].toUpperCase();
+  return name && name[0].toUpperCase();
 };
 
 export default function MovieReviews() {
@@ -45,12 +45,8 @@ export default function MovieReviews() {
   const hideConfirmModal = () => setShowConfirmModal(false);
 
   const handleOnEditClick = () => {
-    const { id, content, rating } = profileOwnersReview;
-    setSelectedReview({
-      id,
-      content,
-      rating,
-    });
+    // const { owner, content, rating } = profileOwnersReview;
+    setSelectedReview({ ...profileOwnersReview });
     setShowEditModal(true);
   };
 
@@ -89,7 +85,7 @@ export default function MovieReviews() {
     if (movieId) fetchReviews();
   }, [movieId]);
 
-  if (!reviews) return null;
+  if (!reviews) return <NotFoundText text="No Reviews !" visible={!reviews.length} />;
 
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
@@ -109,23 +105,23 @@ export default function MovieReviews() {
           ) : null}
         </div>
 
-        <NotFoundText text="No Reviews !" visible={!reviews.length} />
-
         {profileOwnersReview ? (
-          <ReviewCard review={profileOwnersReview} />
+          <div  className="space-y-3 mt-3">
+            <ReviewCard review={profileOwnersReview} />
+            <div className="flex space-x-3 dark:text-white text-primary text-xl p-3 ">
+              <button onClick={displayConfirmModal} type="button">
+                <BsTrash />
+              </button>
+              <button onClick={handleOnEditClick} type="button">
+                <BsPencilSquare />
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3 mt-3">
             {reviews.map((r) => (
-              <div>
-                <ReviewCard review={r} key={r.id} />
-                <div className="flex space-x-3 dark:text-white text-primary text-xl p-3 ">
-                  <button onClick={displayConfirmModal} type="button">
-                    <BsTrash />
-                  </button>
-                  <button onClick={handleOnEditClick} type="button">
-                    <BsPencilSquare />
-                  </button>
-                </div>
+              <div  key={r.id}>
+                <ReviewCard review={r} />
               </div>
             ))}
           </div>

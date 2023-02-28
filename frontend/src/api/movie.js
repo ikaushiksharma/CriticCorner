@@ -111,7 +111,7 @@ export const getTopRatedMovies = async (type, signal) => {
     return catchError(error);
   }
 };
-export const getLatestUploads = async (type, signal) => {
+export const getLatestUploads = async (signal) => {
   try {
     const { data } = await client("/movie/latest-uploads", { signal });
     return data;

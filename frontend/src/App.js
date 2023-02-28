@@ -16,7 +16,7 @@ import SearchMovies from "./components/user/SearchMovies";
 
 export default function App() {
   const { authInfo } = useAuth();
-  // console.log(authInfo);
+  console.log(authInfo);
   const isAdmin = authInfo.profile?.role === "admin";
   // console.log(isAdmin);
   if (isAdmin) return <AdminNavigator />;

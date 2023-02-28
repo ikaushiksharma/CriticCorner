@@ -9,6 +9,8 @@ import Navbar from "../components/admin/Navbar";
 import SearchMovies from "../components/admin/SearchMovies";
 import ActorsUpload from "../components/modals/ActorsUpload";
 import NotFound from "../components/NotFound";
+import MovieReviews from "../components/user/MovieReviews";
+import SingleMovie from "../components/user/SingleMovie";
 function AdminNavigator() {
   const [showMovieUploadModal, setShowMovieUploadModal] = useState(false);
   const [showActorsUploadModal, setShowActorsUploadModal] = useState(false);
@@ -30,6 +32,8 @@ function AdminNavigator() {
             <Route path="/movies" element={<Movies />} />
             <Route path="/actors" element={<Actors />} />
             <Route path="/search" element={<SearchMovies />} />
+            <Route path="/movie/:movieId" element={<SingleMovie />} />
+            <Route path="/movie/reviews/:movieId" element={<MovieReviews />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

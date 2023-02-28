@@ -89,6 +89,7 @@ export default function Actors() {
     fetchActors(currentPageNo);
   }, []);
 
+  if (resultNotFound) return <NotFoundText text="Record Not Found" visible={resultNotFound} />;
   return (
     <>
       <div className="p-5">
@@ -100,7 +101,7 @@ export default function Actors() {
             onReset={handleSearchFormReset}
           />
         </div>
-        <NotFoundText text="Record Not Found" visible={resultNotFound} />
+
         <div className="grid grid-cols-4 gap-5 ">
           {results.length || resultNotFound
             ? results.map((actor) => (

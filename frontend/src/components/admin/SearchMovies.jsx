@@ -39,9 +39,10 @@ export default function SearchMovies() {
     if (query.trim()) searchMovies(query);
   }, [query]);
 
-  return (
+  return resultNotFound ? (
+    <NotFoundText text="Record not Found!" visible={resultNotFound} />
+  ) : (
     <div className="p-5 space-y-3">
-      <NotFoundText text="Record not Found!" visible={resultNotFound} />
       {!resultNotFound &&
         movies.map((movie) => (
           <MovieListItem

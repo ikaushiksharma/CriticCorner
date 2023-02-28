@@ -10,7 +10,7 @@ import MovieList from "./MovieList";
 export default function SearchMovies() {
   const [searchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
-  const [resultNotFound, setResultNotFound] = useState(false);
+  const [resultNotFound, setResultNotFound] = useState(true);
   const { updateNotification } = useNotification();
   const query = searchParams.get("title");
 
@@ -29,10 +29,11 @@ export default function SearchMovies() {
     if (query.trim()) searchMovies(query);
   }, [query]);
 
-  return (
+  return resultNotFound ? (
+    <NotFoundText text="Record not Found!" visible={resultNotFound} />
+  ) : (
     <div className="dark:bg-primary bg-white min-h-screen py-8">
       <Container className="px-2 xl:p-0">
-        <NotFoundText text="Record not Found!" visible={resultNotFound} />
         <MovieList movies={movies} />
       </Container>
     </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BsTrash, BsBoxArrowUpRight, BsPencilSquare } from "react-icons/bs";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteMovie } from "../api/movie";
 import { useNotification } from "../hooks";
 import { getPoster } from "../utils/helper";
@@ -10,6 +11,7 @@ export default function MovieListItem({ movie, afterDelete, afterUpdate }) {
   const { updateNotification } = useNotification();
   const [busy, setBusy] = useState(false);
 
+  const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
@@ -32,6 +34,8 @@ export default function MovieListItem({ movie, afterDelete, afterUpdate }) {
     setShowUpdateModal(false);
     setSelectedMovieId(null);
   };
+  // const handleOnOpenClick = () => {
+  // };
 
   const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
@@ -41,6 +45,7 @@ export default function MovieListItem({ movie, afterDelete, afterUpdate }) {
         movie={movie}
         onDeleteClick={displayConfirmModal}
         onEditClick={handleOnEditClick}
+        // onOpenClick={handleOnOpenClick}
       />
       <div className="p-0">
         <ConfirmModal
@@ -60,8 +65,8 @@ export default function MovieListItem({ movie, afterDelete, afterUpdate }) {
     </>
   );
 }
-function MovieCard({ movie, onDeleteClick, onEditClick, onOpenClick }) {
-  const { poster, title, responsivePosters, status, genres = [] } = movie;
+function MovieCard({ movie, onDeleteClick, onEditClick }) {
+  const { id, poster, title, responsivePosters, status, genres = [] } = movie;
   return (
     <table className="w-full border-b">
       <tbody>
@@ -98,9 +103,9 @@ function MovieCard({ movie, onDeleteClick, onEditClick, onOpenClick }) {
               <button onClick={onEditClick} type="button">
                 <BsPencilSquare />
               </button>
-              <button onClick={onOpenClick} type="button">
+              <Link to={"/movie/" + id}>
                 <BsBoxArrowUpRight />
-              </button>
+              </Link>
             </div>
           </td>
         </tr>
