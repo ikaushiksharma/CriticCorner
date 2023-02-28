@@ -57,7 +57,7 @@ export default function RatingForm({ busy, initialState, onSubmit }) {
 }
 
 const StarsOutlined = ({ ratings, onMouseEnter }) => {
-  ratings.map((_, index) => {
+  return ratings.map((_, index) => {
     return (
       <AiOutlineStar
         className="cursor-pointer"
@@ -69,7 +69,7 @@ const StarsOutlined = ({ ratings, onMouseEnter }) => {
   });
 };
 const StarsFilled = ({ ratings, onMouseEnter }) => {
-  ratings.map((_, index) => {
+  return (ratings.map((_, index) => {
     return (
       <AiFillStar
         className="cursor-pointer"
@@ -78,5 +78,5 @@ const StarsFilled = ({ ratings, onMouseEnter }) => {
         size={24}
       />
     );
-  });
+  }));
 };

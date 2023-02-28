@@ -48,9 +48,7 @@ exports.averageRatingPipeline = (movieId) => {
       $group: {
         _id: null,
         ratingAvg: { $avg: "$rating" },
-      },
-      reviewCount: {
-        $sum: 1,
+        reviewCount: { $sum: 1 },
       },
     },
   ];
@@ -60,6 +58,7 @@ exports.topRatedMoviesPipeline = (type) => {
     reviews: {
       $exists: true,
     },
+
     status: { $eq: "public" },
   };
 

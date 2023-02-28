@@ -2,7 +2,6 @@ const cloudinary = require("../cloud");
 const {
   sendError,
   formatActor,
-  getAverageRating,
   topRatedMoviesPipeline,
   getAverageRatings,
   relatedMovieAggregation,
@@ -328,7 +327,7 @@ exports.getSingleMovie = async (req, res) => {
   const { movieId } = req.params;
   if (!isValidObjectId(movieId)) return sendError(res, "Invalid Movie Id!");
   const movie = await Movie.findById(movieId).populate("director writers cast.actor");
-  const reviews = await getAverageRating(movie._id);
+  const reviews = await getAverageRatings(movie._id);
   const {
     _id: id,
     title,
@@ -393,7 +392,10 @@ exports.getRelatedMovies = async (req, res) => {
 };
 exports.getTopRatedMovies = async (req, res) => {
   const { type = "Film" } = req.query;
+  // console.log('inside top rated movies controller')
   const movies = await Movie.aggregate(topRatedMoviesPipeline(type));
+  // console.log(movies)
+  // console.log(getAverageRatings(movies[0]._id))
   const mapMovies = async (m) => {
     const reviews = await getAverageRatings(m._id);
     return {
