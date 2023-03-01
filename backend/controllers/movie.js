@@ -49,7 +49,6 @@ exports.createMovie = async (req, res) => {
     language,
   });
 
-  console.log(newMovie)
   if (director) {
     if (!isValidObjectId(director)) return sendError(res, "Invalid director id!");
     newMovie.director = director;
@@ -392,10 +391,7 @@ exports.getRelatedMovies = async (req, res) => {
 };
 exports.getTopRatedMovies = async (req, res) => {
   const { type = "Film" } = req.query;
-  // console.log('inside top rated movies controller')
   const movies = await Movie.aggregate(topRatedMoviesPipeline(type));
-  // console.log(movies)
-  // console.log(getAverageRatings(movies[0]._id))
   const mapMovies = async (m) => {
     const reviews = await getAverageRatings(m._id);
     return {

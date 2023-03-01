@@ -76,7 +76,6 @@ export default function SingleMovie() {
     reviews = {},
   } = movie;
 
-  console.log('inside yakhsit ki mummy')
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
       <Container className="xl:px-0 px-2">
@@ -177,7 +176,7 @@ const CastProfiles = ({ cast,onOpenProfile }) => {
       <div className="flex flex-wrap space-x-4">
         {cast.map(({ id, profile, roleAs }) => {
           return (
-            <div onClick={()=>onOpenProfile(id)} key={id} className="basis-28 flex flex-col items-center text-center mb-4">
+            <div onClick={()=>onOpenProfile(profile)} key={id} className="basis-28 flex flex-col items-center text-center mb-4">
               <img
                 className="w-24 h-24 aspect-square object-cover rounded-full"
                 src={profile.avatar}
